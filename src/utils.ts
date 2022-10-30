@@ -1,5 +1,6 @@
 import { ItemPosition } from './index.d';
 
+// 视口高度
 export const viewportHeight =
   window.innerHeight || document.documentElement.clientHeight;
 
@@ -16,7 +17,6 @@ export const changeItemBlock = (item: ItemPosition, scrollDistance: number) => {
  */
 export const checkShowItem = (item: ItemPosition, scrollDistance: number) => {
   const { setItemAppear, leftBlock, rightBlock } = item;
-
   if (scrollDistance >= leftBlock! && scrollDistance <= rightBlock!) {
     setItemAppear(true);
   } else {

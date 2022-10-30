@@ -1,6 +1,6 @@
 {
   "name": "water-design-recycle",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "基于react库，对在可视区一定范围外的dom进行回收的组件",
   "main": "./dist/index.min.js",
   "types": "./dist/index.d.ts",
@@ -15,12 +15,15 @@
     "clean:mac": "rm -rf dist",
     "test": "npm run dev"
   },
+  "keywords": [
+    "component",
+    "recycle"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/skybluebaby/water-design-recycle.git"
   },
-  "keywords": [],
-  "author": "",
+  "author": "skyblue_baby@163.com",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/skybluebaby/water-design-recycle/issues"
