@@ -20,7 +20,7 @@ export interface IRecycleItemProps {
   /**
    * 占位高度
    */
-  itemEstimatedHeight?: number | string;
+  itemEstimatedHeight?: number;
   style?: React.CSSProperties;
   className?: string;
   [key: string]: any;
