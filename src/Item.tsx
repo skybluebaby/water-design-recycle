@@ -6,17 +6,12 @@ import React, {
   useContext,
 } from 'react';
 import { RecycleContext } from './';
-import { RecycleItemProps, ItemPosition } from './index.d';
+import { IRecycleItemProps } from './index.d';
 
-/**
- * 回收的item，若传了estimatedItemHeight占位高度，则不渲染item获取高度，直接盒子占位
- * @param props
- * @returns JSX.Element
- */
-
-const RecycleItem: React.FC<RecycleItemProps> = (props): JSX.Element => {
-  const { children, estimatedItemHeight } = props;
-  const [show, setShow] = useState(!estimatedItemHeight);
+// 回收的item，若传了itemEstimatedHeight占位高度，则不渲染item获取高度，直接盒子占位
+const RecycleItem: React.FC<IRecycleItemProps> = (props) => {
+  const { children, itemEstimatedHeight, style, className, ...rest } = props;
+  const [show, setShow] = useState(!itemEstimatedHeight);
 
   const { addItem } = useContext(RecycleContext);
   const itemRef = useRef<HTMLDivElement>(null);
@@ -31,29 +26,37 @@ const RecycleItem: React.FC<RecycleItemProps> = (props): JSX.Element => {
     if (itemDom) {
       const { top, bottom, width, height } = itemDom.getBoundingClientRect();
       itemSizeRef.current = { width, height };
-      addItem({ top, bottom, setItemAppear } as ItemPosition);
+      addItem({ top, bottom, setItemAppear });
     }
   }, [addItem, setItemAppear]);
 
   // 若存在占位高度，则不需要渲染出结果
-  if (estimatedItemHeight) {
+  if (itemEstimatedHeight) {
     return (
-      <div ref={itemRef} style={{ width: '100%', height: estimatedItemHeight }}>
+      <div
+        ref={itemRef}
+        className={className}
+        style={{ ...style, height: `${itemEstimatedHeight}px` }}
+        {...rest}
+      >
         {show ? children : null}
       </div>
     );
   }
 
-  const { width, height } = itemSizeRef.current || {};
+  const itemSize = itemSizeRef.current;
+  const { width, height } = itemSize || {};
 
   return (
     <div
       ref={itemRef}
+      className={className}
       style={
-        itemSizeRef.current
-          ? { width: `${width}px`, height: `${height}px` }
-          : {}
+        itemSize
+          ? { ...style, width: `${width}px`, height: `${height}px` }
+          : style
       }
+      {...rest}
     >
       {show ? children : null}
     </div>

@@ -1,15 +1,19 @@
-import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
-import { throttle, checkShowItem, changeItemBlock } from './utils';
-import { RecycleProps, ItemPosition } from './index.d';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { throttle } from 'water-design-utils';
+import Item from './Item';
+import { checkShowItem, changeItemBlock } from './utils';
+import { IRecycleProps, IRecycleItemProps, ItemPosition } from './index.d';
 
 export const RecycleContext = React.createContext<{
   addItem: (item: ItemPosition) => void;
 }>({
-  addItem: () => undefined,
+  addItem: () => void 0,
 });
 
-const Recycle: React.FC<RecycleProps> = (props) => {
-  const { children, throttleTime = 40 } = props;
+const Recycle: React.FC<IRecycleProps> & {
+  Item?: React.FC<IRecycleItemProps>;
+} = (props) => {
+  const { children, throttleTime = 60 } = props;
   // 滚动距离
   const [scrollDistance, setScrollDistance] = useState(0);
   // 滚动距离，解决后续的addItem取的值永远是第一个的闭包问题
@@ -27,9 +31,7 @@ const Recycle: React.FC<RecycleProps> = (props) => {
       changeItemBlock(item, scrollDistance);
       checkShowItem(item, scrollDistance);
     }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    dataSetRef.current.push(item);
+    (dataSetRef.current as ItemPosition[]).push(item);
   }, []);
 
   useEffect(() => {
@@ -69,8 +71,10 @@ const Recycle: React.FC<RecycleProps> = (props) => {
   );
 };
 
-Recycle.defaultProps = {
-  throttleTime: 64,
-};
+Recycle.Item = Item;
 
-export default memo(Recycle);
+const RecycleItem = Item;
+
+export { Recycle, RecycleItem };
+
+export default Recycle;

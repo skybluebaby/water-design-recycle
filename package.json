@@ -1,8 +1,12 @@
 {
   "name": "water-design-recycle",
   "version": "1.0.0",
-  "description": "基于react的对不在可视区一定范围的dom回收组件",
-  "main": "index.js",
+  "description": "基于react库，对在可视区一定范围外的dom进行回收的组件",
+  "main": "./dist/index.min.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev.config.js",
     "dev": "webpack-dev-server --config webpack.dev.config.js",
@@ -47,5 +51,8 @@
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.11.1"
+  },
+  "dependencies": {
+    "water-design-utils": "^1.0.1"
   }
 }

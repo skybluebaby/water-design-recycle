@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import Recycle from '../src/';
+import Recycle from '../src';
 import RecycleItem from '../src/Item';
-
-const root = createRoot(document.getElementById('root')!);
 
 const getData = (index = 1) => {
   return new Array(index)
-    .fill(new Array(16).fill(1).map((node, index) => index))
+    .fill(new Array(5).fill(1).map((node, index) => index))
     .reduce((current, item) => {
       return [...current, ...item];
     }, []);
@@ -16,47 +14,32 @@ const getData = (index = 1) => {
 const App: React.FC = () => {
   const [list, setList] = useState<number[]>(getData());
 
-  const handleAddList = () => {
-    setList((prev) => [...prev, ...getData()]);
-  };
+  React.useEffect(() => {
+    const handleScroll = () => {
+      const distantBottom = Math.abs(
+        document.documentElement.offsetHeight -
+          document.documentElement.clientHeight -
+          window.scrollY
+      );
+
+      if (distantBottom < 1) {
+        // 触底
+        setList((prev) => [...prev, ...getData()]);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <>
-      <div
-        style={{
-          position: 'fixed',
-          bottom: '50px',
-          width: '100px',
-          height: '100px',
-          backgroundColor: 'aqua',
-        }}
-        onClick={handleAddList}
-      >
-        add
-      </div>
-      <Recycle>
-        <div>
-          {list.map((item, index) => {
-            return (
-              <RecycleItem key={index} estimatedItemHeight={370}>
-                <div
-                  key={index}
-                  className="list-item"
-                  style={{
-                    width: '100%',
-                    height: '350px',
-                    backgroundColor: 'skyblue',
-                    marginBottom: '20px',
-                  }}
-                >
-                  {index}
-                </div>
-              </RecycleItem>
-            );
-          })}
-        </div>
-      </Recycle>
-    </>
+    <Recycle>
+      {list.map((item, index) => (
+        <RecycleItem key={index} style={{ height: 350, marginBottom: '20px' }}>
+          <div style={{ height: 350, backgroundColor: 'skyblue' }}>{index}</div>
+        </RecycleItem>
+      ))}
+    </Recycle>
   );
 };
-
+const root = createRoot(document.getElementById('root')!);
 root.render(<App />);

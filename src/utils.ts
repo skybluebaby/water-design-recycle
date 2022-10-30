@@ -1,23 +1,4 @@
-import { ItemPosition, ItemParams, Throttle } from './index.d';
-
-/**
- * 一段时间内执行一次回调函数
- * @param callback 回调函数
- * @param wait 节流时间（unit: ms）
- * @returns void
- */
-export const throttle: Throttle = (callback, wait) => {
-  let timeoutId: number | undefined = undefined;
-  return (...args) => {
-    if (timeoutId) {
-      return;
-    }
-    timeoutId = window?.setTimeout(() => {
-      callback(...args);
-      timeoutId = undefined;
-    }, wait);
-  };
-};
+import { ItemPosition } from './index.d';
 
 export const viewportHeight =
   window.innerHeight || document.documentElement.clientHeight;
@@ -36,7 +17,7 @@ export const changeItemBlock = (item: ItemPosition, scrollDistance: number) => {
 export const checkShowItem = (item: ItemPosition, scrollDistance: number) => {
   const { setItemAppear, leftBlock, rightBlock } = item;
 
-  if (scrollDistance >= leftBlock && scrollDistance <= rightBlock) {
+  if (scrollDistance >= leftBlock! && scrollDistance <= rightBlock!) {
     setItemAppear(true);
   } else {
     setItemAppear(false);
